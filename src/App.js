@@ -1,36 +1,29 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
-import { BASE_URL, API_KEY } from "./constants/index.js"
+import { BASE_URL, API_KEY } from "./constants/index.js";
+import Header from "./components/header.js";
+import Photo from "./components/Photo.js";
+import Footer from "./components/footer.js";
 
 function App() {
-  const [newData, setNewData] = useState(null)
-  const [img, setImg] = useState(null);
+  const [info, setInfo]=useState([]);
   useEffect(() => {
-    axios
-    .get(`${BASE_URL}/planetary/apod?api_key=${API_KEY}`)
-    .then((res) => {
-      setNewData(res.data)
-      setImg(res.data.hdurl)
-    })
-    .catch(err => console.log(err))
-  }, [])
+  axios
+  .get(`${BASE_URL}/planetary/apod?api_key=${API_KEY}`)
+  .then(res => {
+    setInfo(res.data)
+  })
+  .catch(err => {
+    console.log(err);
+  })
+}, []);
 
-  const Image = (props) => 
-   (
-    <>
-    <img src={props.img} alt=""></img>
-    </>
-  )
-  
   return (
     <div className="App">
-      <Image img={img} />
-      <ImgDate key={newData.key} date={newData} />
-      <p>
-        Read through the instructions in the README.md file to build your NASA
-        app! Have fun <span role="img" aria-label='go!'>🚀</span>!
-      </p>
+      <Header headerData={info} />
+      <Photo photoData={info} />
+      <Footer footerData={info} />
     </div>
   );
 }
